@@ -1,15 +1,16 @@
 const Note = require("./../models/noteModel");
+const asyncHandler = require("express-async-handler");
 
-const getAllUserNotes = async (req,res) => {
+const getAllUserNotes = asyncHandler(async (req,res) => {
     const notes = await Note.find({ user: req.params.userId });
     res.json(notes);
-};
+});
 
-const createNote = async (req,res) => {
+const createNote = asyncHandler(async (req,res) => {
     const { title, content, category } = req.body;
 
     if(!title || !content || !category){
-        res.status(400);
+        res.status(400).send({ message: "Please fill all the Fields" });
         throw new Error("Please fill all the Fields");
     }else{
         const note = new Note({
@@ -20,9 +21,9 @@ const createNote = async (req,res) => {
 
         res.status(201).json(createdNote);
     }
-}
+});
 
-const getNote = async (req,res) => {
+const getNote = asyncHandler(async (req,res) => {
     const note = await Note.findById(req.params.noteId);
 
     if(note){
@@ -30,9 +31,9 @@ const getNote = async (req,res) => {
     }else{
         res.status(404).json({ message: "Note not found" });
     }
-}
+});
 
-const updateNote = async (req,res) => {
+const updateNote = asyncHandler(async (req,res) => {
     // user will provide this
     const { title, content, category } = req.body;
 
@@ -47,12 +48,12 @@ const updateNote = async (req,res) => {
         const updatedNote = await note.save();
         res.json(updatedNote);
     }else{
-        res.status(404);
+        res.status(404).send({ message: "Note not found" });
         throw new Error("Note not found");
     }
-}
+});
 
-const deleteNote = async (req,res) => {
+const deleteNote = asyncHandler(async (req,res) => {
 
     const note = await Note.findById(req.params.noteId);
 
@@ -60,9 +61,9 @@ const deleteNote = async (req,res) => {
         await note.remove();
         res.json({ message: "Note Removed" });
     }else{
-        res.status(404);
+        res.status(404).send({ message: "Note not found" });
         throw new Error("Note not found");
     }
-}
+});
 
 module.exports = {getAllUserNotes,createNote,getNote,updateNote,deleteNote};
