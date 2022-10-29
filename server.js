@@ -9,7 +9,7 @@ const cors = require('cors');
 const app = express();
 
 const corsOptions ={
-    origin:"https://amazing-notes-app.netlify.app/", 
+    origin:'*', 
     credentials:true, //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
