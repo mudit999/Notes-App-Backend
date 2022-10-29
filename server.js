@@ -4,10 +4,12 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db")
 const userRoutes = require('./routes/userRoutes');
 const noteRoutes = require('./routes/noteRoutes');
+const cors = require("cors");
 
 const app = express();
 dotenv.config();
 connectDB();
+app.use(cors());
 
 // For accepting json data from user
 app.use(express.json());
